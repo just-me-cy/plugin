@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>图片轮播</title>
+        <style type="text/css">
+            .myBox {
+                position: relative;
+                margin: 0 auto;
+                overflow: hidden;
+            }
+            .myCarousel li{
+                width:100%;
+                height:100%;
+                position:absolute;
+                top:0;
+                left:0;
+                z-index:1;
+                -webkit-transition: all 0.5s linear;
+                opacity: 0;
+            }
+            .myCarousel li.active{
+                z-index:2;
+                opacity: 1;
+            }
+
+            .myTabs{
+                position:absolute;
+                bottom:0.5rem;
+                right:0.5rem;
+                z-index:3;
+                list-style: none;
+            }
+            .myTabs li{
+                width:1rem;
+                height:1rem;
+                line-height:1rem;
+                font-size:0.6rem;
+                margin-left:0.3rem;
+                float:left;
+                text-align:center;
+                background-color:rgba(0,0,0,0.5);
+                color:#fff;
+                cursor:pointer;
+            }
+            .myTabs li.active {
+               background-color:#05ABE0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="myCarouselWrap">
+        </div>
+    </body>
+<script>
+    /*
+     * 使用方式
+     *  var instancePC = new PicCarousel();
+     *  var PC = instancePC.init({
+     *      picArr:['imgs/1.jpg','imgs/2.jpg','imgs/3.jpg','imgs/4.jpg','imgs/5.jpg'],//提供图片数组，必须
+     *      width:300,//可先参数，设置宽度
+     *      height:200,//可先参数，设置高度
+     *      interval:2000//可选参数，设置轮播间隔，单位：毫秒
+     * });
+     * */
+    function PicCarousel(){
+
+    }
+
+    PicCarousel.prototype = {
+        _index:0,//当前播放图片序号
+        picLen:0,//图片个数
+        carouselLi:'',//图片html string
+        tabsLi:'',//序号html string
+        init:function(options){
+            var that = this;
+            var picArr = options.picArr || [];//用户配置轮播图片
+            var customW = options.width || 480;//用户配置轮播区域宽度
+            var customH = options.height || 150;//用户配置轮播区域高度
+            var interval = options.interval || 1500;//图片自动播放时间，默认1500ms
+            that.picLen = picArr.length;
+            that.createWrapEl(customW,customH,picArr,interval);
+        },
+        createPicArr:function(picArr){
+            var that = this;
+            if(that.picLen === 0){
+                return;
+            }
+            //生成图片数组
+            var picList = "",
+                    tabList = "";
+            for (i = 0; i < picArr.length; i++) {
+                picList += '<li><img width="100%" src="' + picArr[i] + '"/></li>';
+                tabList += '<li>' + (i + 1) + '</li>';
+            }
+            return {picStr:picList,tabStr:tabList};
+        },
+        _autoPlay:function(t) {
+            //自动播放,以毫秒为单位
+            var that = this;
+            play = setInterval(function () {
+                that._next();
+             }, t);
+         },
+
+        _next: function() {
+            //下一张图片
+            var that = this;
+            that._setIndex('next');
+            that._run(that._index);
+        },
+        _prev:function () {
+            //上一张图片
+            var that = this;
+            that._setIndex('prev');
+            that._run(that._index);
+        },
+
+        _goto: function(index) {
+            //切换到指定某张图片
+            var that = this;
+            that._run(index);
+        },
+
+       _setIndex: function (type) {
+            //设置当前要播放图片的_index
+            var that = this;
+             switch (type) {
+                case 'prev':
+                    that._index--;
+                    if (that._index < 0) that._index = that.picLen - 1;
+                    break;
+                case 'next':
+                    that._index++;
+                    if (that._index >= that.picLen) that._index = 0;
+                    break;
+            }
+        },
+        _run:function(curIdx) {
+            //轮播切换
+            var that = this;
+            for (i = 0; i < that.picLen; i++) {
+                var el = that.carouselLi[i];
+                el.className = that.tabsLi[i].className = '';
+            }
+            that.carouselLi[curIdx].className = that.tabsLi[curIdx].className = 'active';
+        },
+        createWrapEl:function(width,height,picArr,interval){
+                var that = this;
+                var box = document.createElement("div"),
+                        carousel = document.createElement("ul"),
+                        tabs = document.createElement("ol");
+                box.className = "myBox";
+                box.style.width = width+"px";
+                box.style.height = height+"px";
+                carousel.className = "myCarousel";
+                tabs.className = "myTabs";
+                box.appendChild(carousel);
+                box.appendChild(tabs);
+                document.querySelector(".myCarouselWrap").appendChild(box);
+
+                carousel.innerHTML = that.createPicArr(picArr).picStr;
+                tabs.innerHTML =  that.createPicArr(picArr).tabStr;
+
+
+                that.carouselLi = carousel.getElementsByTagName("li");
+                that.tabsLi = tabs.getElementsByTagName("li");
+
+                that.carouselLi[0].className = that.tabsLi[0].className = "active";
+                that.picLen >= 2 && that._autoPlay(interval);//2张以上才，可以自动播放
+
+                for (var i = 0; i < that.picLen; i++) {
+                    that.tabsLi[i].index = i;
+                    that.tabsLi[i].onclick = function () {
+                        that._goto(this.index);
+                        that._index = this.index;
+                    }
+                }
+            }
+        }
+
+       var instancePC = new PicCarousel();
+       var PC = instancePC.init({
+           picArr:['imgs/1.jpg','imgs/2.jpg','imgs/3.jpg','imgs/4.jpg','imgs/5.jpg'],
+           width:300,
+           height:200,
+           interval:2000
+       });
+    </script>
+</html>
