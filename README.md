@@ -1,6 +1,7 @@
 ### popWin
    自定义弹出窗口，支持4种类型弹窗
-*alert
+
+*		alert
  		var alertWin = new window.win();
 		alertWin.alert({
 			title:"提示",
@@ -15,7 +16,8 @@
 		}).on("close", function () {
 			alert("自定义事件");
 		})
-*confirm
+
+*		confirm
  		var confirmWin = new window.win();
 		confirmWin.confirm({
 			title:"请确认",
@@ -33,7 +35,7 @@
 		}).on("confirm", function () {
 			alert("自定义");
         });
-*prompt
+*		prompt
 		var promptWin = new window.win();
 		promptWin.prompt({
 			title:"登录",
@@ -61,7 +63,8 @@
 		}).on("prompt", function () {
 			alert("自定义prompt");
 		});
-*common
+
+*		common
 		var commonWin = new window.win();
         commonWin.common({
             body:"简单提示框",
