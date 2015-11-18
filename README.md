@@ -1,5 +1,7 @@
 ### popWin
-   自定义弹出窗口，支持4种类型弹窗
+   自定义弹出窗口，支持4种类型弹窗。
+   只需要引用两个js文件：widget.js,win.js。
+   可配置弹窗可拖拽，支持自定义事件，绑定多个多个处理事件。
 
 *		alert
  		var alertWin = new window.win();
