@@ -19,6 +19,8 @@
 			alert("自定义事件");
 		})
 
+![alert](/popWin/imgs/alert.png "alert")
+
 *		confirm
  		var confirmWin = new window.win();
 		confirmWin.confirm({
@@ -37,6 +39,8 @@
 		}).on("confirm", function () {
 			alert("自定义");
         });
+![confirm](/popWin/imgs/confirm.png "confirm")
+
 *		prompt
 		var promptWin = new window.win();
 		promptWin.prompt({
@@ -65,6 +69,7 @@
 		}).on("prompt", function () {
 			alert("自定义prompt");
 		});
+![prompt](/popWin/imgs/prompt.png "prompt")
 
 *		common
 		var commonWin = new window.win();
@@ -75,4 +80,5 @@
         }).on("close", function () {
             alert("关闭");
         });
+![comm](/popWin/imgs/comm.png "comm")
 
